@@ -22,7 +22,7 @@ use {
         },
     },
     spl_associated_token_account_client::address::get_associated_token_address_with_program_id,
-    spl_token_2022::{
+    spl_token::{
         extension::ExtensionType,
         instruction::initialize_account,
         state::{Account, AccountState},
@@ -36,7 +36,7 @@ async fn success_account_exists() {
     let associated_token_address = get_associated_token_address_with_program_id(
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
 
     let (mut banks_client, payer, recent_blockhash) =
@@ -51,7 +51,7 @@ async fn success_account_exists() {
         &payer.pubkey(),
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
 
     let transaction = Transaction::new_signed_with_payer(
@@ -69,7 +69,7 @@ async fn success_account_exists() {
         .expect("get_account")
         .expect("associated_account not none");
     assert_eq!(associated_account.data.len(), expected_token_account_len);
-    assert_eq!(associated_account.owner, spl_token_2022::id());
+    assert_eq!(associated_account.owner, spl_token::id());
     assert_eq!(associated_account.lamports, expected_token_account_balance);
 
     // Unchecked instruction fails
@@ -77,7 +77,7 @@ async fn success_account_exists() {
         &payer.pubkey(),
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
 
     let transaction = Transaction::new_signed_with_payer(
@@ -105,7 +105,7 @@ async fn success_account_exists() {
         &payer.pubkey(),
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
 
     let transaction = Transaction::new_signed_with_payer(
@@ -123,7 +123,7 @@ async fn success_account_exists() {
         .expect("get_account")
         .expect("associated_account not none");
     assert_eq!(associated_account.data.len(), expected_token_account_len);
-    assert_eq!(associated_account.owner, spl_token_2022::id());
+    assert_eq!(associated_account.owner, spl_token::id());
     assert_eq!(associated_account.lamports, expected_token_account_balance);
 }
 
@@ -134,12 +134,12 @@ async fn fail_account_exists_with_wrong_owner() {
     let associated_token_address = get_associated_token_address_with_program_id(
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
 
     let wrong_owner = Pubkey::new_unique();
     let mut associated_token_account =
-        SolanaAccount::new(1_000_000_000, Account::LEN, &spl_token_2022::id());
+        SolanaAccount::new(1_000_000_000, Account::LEN, &spl_token::id());
     let token_account = Account {
         mint: token_mint_address,
         owner: wrong_owner,
@@ -160,7 +160,7 @@ async fn fail_account_exists_with_wrong_owner() {
         &payer.pubkey(),
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
     let transaction = Transaction::new_signed_with_payer(
         &[instruction],
@@ -203,10 +203,10 @@ async fn fail_non_ata() {
                 &account.pubkey(),
                 token_account_balance,
                 token_account_len as u64,
-                &spl_token_2022::id(),
+                &spl_token::id(),
             ),
             initialize_account(
-                &spl_token_2022::id(),
+                &spl_token::id(),
                 &account.pubkey(),
                 &token_mint_address,
                 &wallet_address,
@@ -223,7 +223,7 @@ async fn fail_non_ata() {
         &payer.pubkey(),
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
     instruction.accounts[1] = AccountMeta::new(account.pubkey(), false); // <-- Invalid associated_account_address
 

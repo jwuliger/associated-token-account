@@ -14,7 +14,7 @@ use {
     },
     spl_associated_token_account::instruction::create_associated_token_account,
     spl_associated_token_account_client::address::get_associated_token_address_with_program_id,
-    spl_token_2022::{extension::ExtensionType, state::Account},
+    spl_token::{extension::ExtensionType, state::Account},
 };
 
 #[tokio::test]
@@ -24,7 +24,7 @@ async fn test_associated_token_address() {
     let associated_token_address = get_associated_token_address_with_program_id(
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
 
     let (banks_client, payer, recent_blockhash) =
@@ -50,7 +50,7 @@ async fn test_associated_token_address() {
             &payer.pubkey(),
             &wallet_address,
             &token_mint_address,
-            &spl_token_2022::id(),
+            &spl_token::id(),
         )],
         Some(&payer.pubkey()),
     );
@@ -64,7 +64,7 @@ async fn test_associated_token_address() {
         .expect("get_account")
         .expect("associated_account not none");
     assert_eq!(associated_account.data.len(), expected_token_account_len,);
-    assert_eq!(associated_account.owner, spl_token_2022::id());
+    assert_eq!(associated_account.owner, spl_token::id());
     assert_eq!(associated_account.lamports, expected_token_account_balance);
 }
 
@@ -75,7 +75,7 @@ async fn test_create_with_fewer_lamports() {
     let associated_token_address = get_associated_token_address_with_program_id(
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
 
     let (banks_client, payer, recent_blockhash) =
@@ -113,7 +113,7 @@ async fn test_create_with_fewer_lamports() {
             &payer.pubkey(),
             &wallet_address,
             &token_mint_address,
-            &spl_token_2022::id(),
+            &spl_token::id(),
         )],
         Some(&payer.pubkey()),
     );
@@ -136,7 +136,7 @@ async fn test_create_with_excess_lamports() {
     let associated_token_address = get_associated_token_address_with_program_id(
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
 
     let (banks_client, payer, recent_blockhash) =
@@ -174,7 +174,7 @@ async fn test_create_with_excess_lamports() {
             &payer.pubkey(),
             &wallet_address,
             &token_mint_address,
-            &spl_token_2022::id(),
+            &spl_token::id(),
         )],
         Some(&payer.pubkey()),
     );
@@ -197,7 +197,7 @@ async fn test_create_account_mismatch() {
     let _associated_token_address = get_associated_token_address_with_program_id(
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
 
     let (banks_client, payer, recent_blockhash) =
@@ -207,7 +207,7 @@ async fn test_create_account_mismatch() {
         &payer.pubkey(),
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
     instruction.accounts[1] = AccountMeta::new(Pubkey::default(), false); // <-- Invalid associated_account_address
 
@@ -226,7 +226,7 @@ async fn test_create_account_mismatch() {
         &payer.pubkey(),
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
     instruction.accounts[2] = AccountMeta::new(Pubkey::default(), false); // <-- Invalid wallet_address
 
@@ -245,7 +245,7 @@ async fn test_create_account_mismatch() {
         &payer.pubkey(),
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
     instruction.accounts[3] = AccountMeta::new(Pubkey::default(), false); // <-- Invalid token_mint_address
 
@@ -268,7 +268,7 @@ async fn test_create_associated_token_account_using_legacy_implicit_instruction(
     let associated_token_address = get_associated_token_address_with_program_id(
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
 
     let (banks_client, payer, recent_blockhash) =
@@ -292,7 +292,7 @@ async fn test_create_associated_token_account_using_legacy_implicit_instruction(
         &payer.pubkey(),
         &wallet_address,
         &token_mint_address,
-        &spl_token_2022::id(),
+        &spl_token::id(),
     );
 
     // Use implicit  instruction and rent account to replicate the legacy invocation
@@ -313,6 +313,6 @@ async fn test_create_associated_token_account_using_legacy_implicit_instruction(
         .expect("get_account")
         .expect("associated_account not none");
     assert_eq!(associated_account.data.len(), expected_token_account_len);
-    assert_eq!(associated_account.owner, spl_token_2022::id());
+    assert_eq!(associated_account.owner, spl_token::id());
     assert_eq!(associated_account.lamports, expected_token_account_balance);
 }

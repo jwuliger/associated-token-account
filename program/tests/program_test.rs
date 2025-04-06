@@ -49,7 +49,7 @@ pub fn program_test_2022(token_mint_address: Pubkey) -> ProgramTest {
     pc.add_account_with_file_data(
         token_mint_address,
         1461600,
-        spl_token_2022::id(),
+        spl_token::id(),
         "token-mint-data.bin",
     );
 

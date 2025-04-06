@@ -16,7 +16,7 @@ use {
     },
     spl_associated_token_account::instruction,
     spl_associated_token_account_client::address::get_associated_token_address_with_program_id,
-    spl_token_2022::{
+    spl_token::{
         extension::{ExtensionType, StateWithExtensionsOwned},
         state::{Account, Mint},
     },
@@ -37,7 +37,7 @@ async fn create_mint(context: &mut ProgramTestContext, program_id: &Pubkey) -> (
                 space as u64,
                 program_id,
             ),
-            spl_token_2022::instruction::initialize_mint(
+            spl_token::instruction::initialize_mint(
                 program_id,
                 &token_mint_address,
                 &mint_authority.pubkey(),
@@ -107,7 +107,7 @@ async fn try_recover_nested(
     // mint to nested account
     let amount = 100;
     let transaction = Transaction::new_signed_with_payer(
-        &[spl_token_2022::instruction::mint_to(
+        &[spl_token::instruction::mint_to(
             program_id,
             &nested_mint,
             &nested_associated_token_address,
@@ -212,7 +212,7 @@ async fn success_same_mint_2022() {
     let dummy_mint = Pubkey::new_unique();
     let pt = program_test_2022(dummy_mint);
     let mut context = pt.start_with_context().await;
-    check_same_mint(&mut context, &spl_token_2022::id()).await;
+    check_same_mint(&mut context, &spl_token::id()).await;
 }
 
 #[tokio::test]
@@ -283,7 +283,7 @@ async fn success_different_mints_2022() {
     let dummy_mint = Pubkey::new_unique();
     let pt = program_test_2022(dummy_mint);
     let mut context = pt.start_with_context().await;
-    check_different_mints(&mut context, &spl_token_2022::id()).await;
+    check_different_mints(&mut context, &spl_token::id()).await;
 }
 
 async fn check_missing_wallet_signature(context: &mut ProgramTestContext, program_id: &Pubkey) {
@@ -333,7 +333,7 @@ async fn fail_missing_wallet_signature_2022() {
     let dummy_mint = Pubkey::new_unique();
     let pt = program_test_2022(dummy_mint);
     let mut context = pt.start_with_context().await;
-    check_missing_wallet_signature(&mut context, &spl_token_2022::id()).await;
+    check_missing_wallet_signature(&mut context, &spl_token::id()).await;
 }
 
 #[tokio::test]
@@ -394,7 +394,7 @@ async fn fail_wrong_signer_2022() {
     let dummy_mint = Pubkey::new_unique();
     let pt = program_test_2022(dummy_mint);
     let mut context = pt.start_with_context().await;
-    check_wrong_signer(&mut context, &spl_token_2022::id()).await;
+    check_wrong_signer(&mut context, &spl_token::id()).await;
 }
 
 #[tokio::test]
@@ -450,7 +450,7 @@ async fn fail_not_nested_2022() {
     let dummy_mint = Pubkey::new_unique();
     let pt = program_test_2022(dummy_mint);
     let mut context = pt.start_with_context().await;
-    check_not_nested(&mut context, &spl_token_2022::id()).await;
+    check_not_nested(&mut context, &spl_token::id()).await;
 }
 
 #[tokio::test]
@@ -513,7 +513,7 @@ async fn fail_wrong_address_derivation_owner_2022() {
     let dummy_mint = Pubkey::new_unique();
     let pt = program_test_2022(dummy_mint);
     let mut context = pt.start_with_context().await;
-    check_wrong_address_derivation_owner(&mut context, &spl_token_2022::id()).await;
+    check_wrong_address_derivation_owner(&mut context, &spl_token::id()).await;
 }
 
 #[tokio::test]
@@ -573,7 +573,7 @@ async fn fail_owner_account_does_not_exist() {
     let dummy_mint = Pubkey::new_unique();
     let pt = program_test_2022(dummy_mint);
     let mut context = pt.start_with_context().await;
-    check_owner_account_does_not_exist(&mut context, &spl_token_2022::id()).await;
+    check_owner_account_does_not_exist(&mut context, &spl_token::id()).await;
 }
 
 #[tokio::test]
@@ -582,7 +582,7 @@ async fn fail_wrong_spl_token_program() {
     let dummy_mint = Pubkey::new_unique();
     let pt = program_test_2022(dummy_mint);
     let mut context = pt.start_with_context().await;
-    let program_id = spl_token_2022::id();
+    let program_id = spl_token::id();
     let wrong_program_id = spl_token::id();
     let (mint, mint_authority) = create_mint(&mut context, &program_id).await;
 
@@ -632,7 +632,7 @@ async fn fail_destination_not_wallet_ata() {
     let wrong_wallet = Pubkey::new_unique();
     let dummy_mint = Pubkey::new_unique();
     let pt = program_test_2022(dummy_mint);
-    let program_id = spl_token_2022::id();
+    let program_id = spl_token::id();
     let mut context = pt.start_with_context().await;
     let (mint, mint_authority) = create_mint(&mut context, &program_id).await;
 
